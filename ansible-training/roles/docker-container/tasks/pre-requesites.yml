@@ -1,0 +1,14 @@
+---
+- name: Installing Prerequisites for Docker
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg
+      - python3-pip
+      - python3-setuptools
+      - lsb-release
+    update_cache: yes
+    state: present
+

@@ -1,0 +1,18 @@
+---
+# tasks file for docker-container
+#
+
+
+- name: un-installing old version
+  include_tasks: un-install_old_versions.yml
+
+- name: installing pre-req
+  include_tasks: pre-requesites.yml
+
+- name: install docker
+  include_tasks: install_docker.yml
+
+- name: build docker
+  include_tasks: build_container.yml
+
+

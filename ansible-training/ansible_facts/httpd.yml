@@ -1,0 +1,63 @@
+---
+- hosts: all
+  tasks:
+  - name: Install apache in ubuntu
+    apt:
+      name: apache2
+      state: absent
+      update_cache: yes
+    when: ansible_facts['os_family'] == "Debian"
+
+  - name: start apache server in ubuntu
+    service:
+      name: apache2
+      enabled: true
+      state: starteid
+    when: ansible_facts['os_family'] == "Debian"
+
+
+
+  - name: Install apache in Redhat
+    yum:
+      name: httpd
+      state: absent
+      update_cache: yes
+    when: ansible_facts['os_family'] == "RedHat"
+
+  - name: start apache server in redhat
+    service:
+      name: httpd
+      enabled: true
+      state: started
+    when: ansible_facts['os_family'] == "RedHat"
+
+  - name: create index.html file
+    template:
+      src: /root/ansible-playbooks/ansible_facts/index.html.j2
+      dest: /var/www/html/index.html
+    notify: start apache2
+    when: ansible_facts['os_family'] == "Debian"
+
+  - name: create index.html file
+    template:
+      src: /root/ansible-playbooks/ansible_facts/index.html.j2
+      dest: /var/www/html/index.html
+    notify: start httpd
+    when: ansible_facts['os_family'] == "RedHat"
+
+
+
+  handlers:
+  - name: start apache2
+    service:
+     name: apache2
+     enabled: yes
+     state: restarted
+
+
+  - name: start httpd
+    service:
+     name: httpd
+     enabled: yes
+     state: restarted
+

@@ -1,0 +1,21 @@
+---
+- name: Copying Docker file
+  template:
+    src: templates/Dockerfile.j2
+    dest: /root/Dockerfile
+
+- name: Build image
+  docker_image:
+     path: /root
+     name: "{{ docker_image_name }}"
+     state: build
+     tag: "{{ image_tag }}"
+
+- name: build docker container
+  docker_container:
+    name: "{{ docker_container_name }}"
+    image: "{{ docker_image_name }}:{{ image_tag }}"
+    state: started
+    restart_policy: unless-stopped
+    ports: 8082:80
+

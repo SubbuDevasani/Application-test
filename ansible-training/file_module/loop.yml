@@ -1,0 +1,61 @@
+---
+- hosts: all
+  tasks: 
+  - name: creating a directory
+    file: 
+      path: /root/sample_directory
+      state: directory
+   
+  - name: creating files using loop
+    file:
+      path: /root/sample_directory/{{ item }}
+      state: touch
+    loop:
+      - file1.txt
+      - file2.txt
+      - file3.txt
+    tags: 
+     - create_file
+
+  - name: adding content to the files
+    lineinfile:
+      dest: /root/sample_directory/{{ item }}
+      line: content of {{ item }}
+      state: present
+    with_items:
+      - file1.txt
+      - file2.txt
+      - file3.txt
+    tags:
+      - add content
+
+  - name: deleting the files
+    file:
+      path: /root/sample_directory/{{ item }}
+      state: absent
+    loop:
+      - file1.txt
+      - file2.txt
+      - file3.txt
+    tags:
+      - delete_file
+
+
+  - name: print the content in file2.txt
+    command: cat /root/sample_directory/file2.txt
+    register: output_register
+
+  - name: saving the registered value 
+    set_fact: 
+      output_value: "{{ output_register.stdout }}"
+
+  - name: print the output  value
+    debug:
+      msg: "this is the content : {{ output_value }}"
+
+
+  - name: create a file with above variable
+    copy:
+      dest: /root/test.txt
+      content: "Th output of above variable : {{ output_value }}"
+    when: output_register.stdout != "" 

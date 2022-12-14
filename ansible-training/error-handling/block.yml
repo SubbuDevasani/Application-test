@@ -1,0 +1,34 @@
+---
+- name: Ansible Blocks
+  hosts: ubuntu
+
+  tasks:
+    - block:
+        - name: creating  file1
+          file:
+            path: /root/sample_directory/file1.txt
+            state: touch
+
+        - name: creating  file2
+          file: 
+            path: /root/sample_directory/file2.txt
+            state: touch
+
+      when: ansible_facts['os_family'] == "Debian"
+
+      rescue:
+
+         - name: rescue
+           command: rm -rf /root/sample_directory/file1.txt 
+         - name: rescue
+           command: rm -rf /root/sample_directory/file2.txt
+
+      always:
+
+        - name: creating  file1
+          file:
+            path: /root/sample_directory/file3.txt
+            state: touch
+
+
+

@@ -1,0 +1,26 @@
+---
+- name: Adding gpg keys
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    keyring: /etc/apt/keyrings/docker.gpg
+
+- name: Adding GPG to the apt repo
+  apt_repository:
+    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+    state: present
+
+- name: Install Docker Engine.
+  apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-compose-plugin
+    update_cache: yes
+    state: present
+  notify: start docker
+
+- name: Install Docker Module for Python
+  pip:
+    name: docker
+

@@ -1,0 +1,10 @@
+---
+# vars file for docker-container
+#
+#
+docker_image_name: nginx-image
+
+docker_container_name: my_container
+
+image_tag: test
+

@@ -1,0 +1,48 @@
+---
+# tasks file for sample
+#
+#
+
+
+
+- name: Install apache in ubuntu
+  apt:
+    name: apache2
+    state: present
+    update_cache: yes
+  when: ansible_facts['os_family'] ==  ubuntu_var 
+
+- name: start apache server in ubuntu
+  service:
+    name: apache2
+    enabled: yes
+    state: started
+  when: ansible_facts['os_family'] ==  ubuntu_var 
+
+- name: Install apache in Redhat
+  yum:
+    name: httpd
+    state: present
+    update_cache: yes
+  when: ansible_facts['os_family'] ==  redhat_var 
+
+- name: start apache server in redhat
+  service:
+    name: httpd
+    enabled: true
+    state: started
+  when: ansible_facts['os_family'] == redhat_var 
+
+- name: create index.html file
+  copy:
+    src: index.html
+    dest: /var/www/html/
+  notify: start apache2
+  when: ansible_facts['os_family'] ==  ubuntu_var 
+
+- name: create index.html file
+  template:
+    src: /root/ansible-playbooks/ansible_facts/index.html.j2
+    dest: /var/www/html/index.html
+  notify: start httpd
+  when: ansible_facts['os_family'] == redhat_var 

@@ -1,0 +1,6 @@
+---
+# defaults file for docker-container
+#
+# 
+image_tag: build_image
+

@@ -1,0 +1,8 @@
+---
+# vars file for samplei
+#
+
+ubuntu_var: Debian
+
+redhat_var: RedHat
+
