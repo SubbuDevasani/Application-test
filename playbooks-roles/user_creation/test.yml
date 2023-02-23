@@ -17,7 +17,7 @@
       groups: developers
 
 
-  - name: Set up authorized keys for the developer user (copying public keys to above created user)
+  - name: Set up authorized keys for the developer user (copying public keys to above created user) 
     authorized_key: user=dev1 key="{{item}}"
     with_file:
       - /root/.ssh/id_rsa.pub
